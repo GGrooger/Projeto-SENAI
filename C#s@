@@ -1,0 +1,124 @@
+#include <Servo.h>
+
+Servo meuservo;
+Servo meuservo2;
+int tampa = 6;
+int decid = 5;
+int trig=11,echo=10;
+float distancia,tiempo;
+int bplastico = 13;
+int bpapel = 12;
+int bmetal = 8;
+int bvidro = 7;
+int lplastico = 9;
+int lpapel = 3;
+int lvidro = 4;
+int i = 0;
+
+void setup()
+{
+  pinMode(13, INPUT);
+  pinMode(12, INPUT);
+  pinMode(8, INPUT);
+  pinMode(7, INPUT);
+  pinMode(9, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode (trig, OUTPUT);
+  pinMode(echo, INPUT);
+  Serial.begin(9600);
+  meuservo.attach(tampa);
+  meuservo2.attach(decid);
+  meuservo.write(0);
+  meuservo2.write(0);
+}
+
+void loop()
+{
+  digitalWrite(trig,HIGH);
+  digitalWrite(trig,LOW);
+  
+  tiempo=pulseIn(echo,HIGH);
+  distancia=tiempo/29/2;
+  
+  Serial.print(distancia);
+  Serial.println(" cm");
+  
+  if(distancia <= 50) {
+    meuservo.write(180);
+    delay(30000);
+    meuservo.write(0);
+  }
+  
+  //---Pressionar Botão PLASTICO---//
+  if(digitalRead(bplastico) == 1) {
+    digitalWrite(lplastico, 1);
+    digitalWrite(lpapel, 0);
+    digitalWrite(lvidro, 0);
+    for (i = 0; i <= 180; i += 2) {
+      meuservo2.write(i);
+      delay(20);
+    }
+    delay(2000);
+    
+    for (i = 180; i >= 1; i -= 2) {
+      meuservo2.write(i);
+      delay(20);
+    }
+  }
+  
+  //---Pressionar Botão PAPEL---//
+  if(digitalRead(bpapel) == 1) {
+    digitalWrite(lplastico, 0);
+    digitalWrite(lpapel, 1);
+    digitalWrite(lvidro, 0);
+    for (i = 0; i <= 180; i += 2) {
+      meuservo2.write(i);
+      delay(20);
+    }
+    delay(2000);
+    
+    for (i = 180; i >= 1; i -= 2) {
+      meuservo2.write(i);
+      delay(20);
+    }
+  }
+  
+  //---Pressionar Botão METAL---//
+  if(digitalRead(bmetal) == 1) {
+    digitalWrite(lplastico, 1);
+    digitalWrite(lpapel, 0);
+    digitalWrite(lvidro, 1);
+    for (i = 0; i <= 180; i += 2) {
+      meuservo2.write(i);
+      delay(20);
+    }
+    delay(2000);
+    
+    for (i = 180; i >= 1; i -= 2) {
+      meuservo2.write(i);
+      delay(20);
+    }
+  }
+  
+  //---Pressionar Botão VIDRO---//
+  if(digitalRead(bvidro) == 1) {
+    digitalWrite(lplastico, 0);
+    digitalWrite(lpapel, 0);
+    digitalWrite(lvidro, 1);
+    for (i = 0; i <= 180; i += 2) {
+      meuservo2.write(i);
+      delay(20);
+    }
+    delay(2000);
+    
+    for (i = 180; i >= 1; i -= 2) {
+      meuservo2.write(i);
+      delay(20);
+    }
+  }
+  
+  
+}
+    
